@@ -1,5 +1,18 @@
+<script>
+$(document).ready(function(){
+   $("#IDname").val("Please input your ID");
+//   $("#lpassword").val("비밀번호를 입력해주세요");
+   $("#IDname").focus(function(){
+      $("#IDname").val("");
+   })
+   $("#IDname").focusout(function(){
+      if($("#IDname").val().length==0){
+         $("#IDname").val("Please input your ID");
+      }
+   })
+})
 
-
+</script>
 <script>
   function login(){
 
