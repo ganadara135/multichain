@@ -6,7 +6,8 @@ let multichain = require("multichain-node")({
 //    port: 36354,
       port: 7206,
     host: '220.230.112.30',
-    pass: "9WBL5xWD1nRkcRyLWw6arcv3ToVRDPt9F8n51DfWMLPo",
+//    pass: "9WBL5xWD1nRkcRyLWw6arcv3ToVRDPt9F8n51DfWMLPo",
+    pass: "AxNpbxmkLN4Hey4AkV4VeC964ndGQMxmfizwH9Y56znT",
 //      host: '192.168.0.5',
 
     user: "multichainrpc",
@@ -26,7 +27,7 @@ multichain.getInfo((err, info) => {
 const connection = {
       port: 7206,
       host: '220.230.112.30',
-      pass: "9WBL5xWD1nRkcRyLWw6arcv3ToVRDPt9F8n51DfWMLPo",
+      pass: "AxNpbxmkLN4Hey4AkV4VeC964ndGQMxmfizwH9Y56znT",
 //      host: '127.0.0.1',
 //      pass: "973MVcjrxbwyKdCWN6mMeCKUXZGRXgAFB4g4xr3PkcME"
       user: "multichainrpc",
@@ -105,7 +106,12 @@ let startTests = () => {
     multichain.getNewAddressPromise()
     .then(address => {
         assert(address, "Could not get new address")
+//        this = {};
+        console.log("this  ===> ", this);
         this.address1 = address;
+
+        console.log("address : ", address)
+        console.log("this.address1 : ", this.address1)
 
         console.log("TEST: VALIDATE ADDRESS")
         return multichain.validateAddressPromise({address: this.address1})
@@ -124,18 +130,31 @@ let startTests = () => {
         console.log("TEST: GRANT")
         return multichain.grantPromise({
             addresses: this.address1,
-            permissions: "send,receive,issue,admin"
+            permissions: "admin,send,receive,issue"
         })
     })
     .then(permissionsTxid => {
         assert(permissionsTxid)
 
+        console.log("TEST: LIST PERMISSIONS")
+        return multichain.listPermissionsPromise({
+            addresses: `${this.address1}`,
+            verbose: false
+        })
+    })
+    .then(permissions => {
+        assert(permissions);
+        console.log("permissions : ", permissions);
         console.log("TEST: GET NEW ADDRESS")
         return multichain.getNewAddressPromise();
     })
     .then(address2 => {
         assert(address2, "Could not get new address 2");
         this.address2 = address2;
+
+
+        console.log("this.address1 : ", this.address1)
+        console.log("this.address2 : ", this.address2)
 
         console.log("TEST: GRANT FROM")
         return multichain.grantFromPromise({
@@ -230,7 +249,8 @@ let startTests = () => {
 let confirmCallback1 = () => {
     bluebird.bind(this)
     .then(() => {
-
+        console.log("this.address1 : ", this.address1)
+        console.log("this : ", this)
         console.log("TEST: LIST ASSETS")
         return multichain.listAssetsPromise()
     })
