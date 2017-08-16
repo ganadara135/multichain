@@ -38,6 +38,7 @@ app.use(session({
 console.log(process.argv);
 var client_token_param = process.argv[2];
 var address_param = process.argv[3];
+//var web
 
 console.log('client_token_param: ' + client_token_param);
 console.log('address_param: ' + address_param);
@@ -45,6 +46,6 @@ console.log('address_param: ' + address_param);
 var router = require('./router/main')(app, fs, jsonParser, urlencodedParser,client_token_param,address_param);
 // or router(app, fs, jsonParser, urlencodedParser);
 
-var server = app.listen(3003, function(){
-    console.log("Server has started on port 3003")
+var server = app.listen(80, function(){
+    console.log("Server has started on port 80")
 });
