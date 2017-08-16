@@ -74,10 +74,6 @@ app.post('/createAddressPrivateKey/:IDname',function(req,res){
 //                this = {};
                 console.log("this  ===> ", this);
 /*
-                this.addressOf = "";
-                this.pubkeyOf = "";
-                this.privkeyOf = "";
-
                 this.address1 = addrPubPri[0]["address"];
                 this.pubkey = addrPubPri[0]["pubkey"];
                 this.privkey = addrPubPri[0]["privkey"];
@@ -86,11 +82,7 @@ app.post('/createAddressPrivateKey/:IDname',function(req,res){
                 result["address"] = addrPubPri[0]["address"];
                 result["pubkey"] = addrPubPri[0]["pubkey"];
                 result["privkey"] = addrPubPri[0]["privkey"];
-//                console.log("addrPubPri.address : " + addrPubPri.address);
-//                console.log("addrPubPri[address] : " + addrPubPri[0]["address"]);
-//                console.log("this.addressMy : " + result["address"]);
-//                res.json(result);
-//`${this.address1}'
+
                 return multichain.importAddressPromise({
                   address: result["address"],
                   rescan: false
@@ -113,7 +105,7 @@ app.post('/createAddressPrivateKey/:IDname',function(req,res){
                     }
                     if(confirmed == true){
                         //confirmCallbackEnroll.call(result);
-                        confirmCallbackEnroll(result);
+                        confirmCallbackEnroll(result,res);
                     }
                 })
             })
@@ -152,7 +144,7 @@ app.post('/createAddressPrivateKey/:IDname',function(req,res){
   }
 
 
-  let confirmCallbackEnroll = (result_return) => {
+  let confirmCallbackEnroll = (result_return,res) => {
       bluebird.bind(this)   // this is not working????
       .then(() => {
 
@@ -209,7 +201,15 @@ app.post('/createAddressPrivateKey/:IDname',function(req,res){
           console.log("Finished Successfully")
           return multichain.sendRawTransactionPromise({
               hexstring: hexvalue.hex
-          })          
+          })
+      })
+      .then(tx_hex => {
+          console.log("tx_hex  : ", tx_hex);
+
+          assert(tx_hex)
+
+          console.log("Finished Successfully");
+          res.json(result_return);
       })
       .catch(err => {
           console.log(err)
